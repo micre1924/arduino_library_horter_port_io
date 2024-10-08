@@ -22,10 +22,10 @@ uint8_t wireJobListPosition;
 
 String  adcValuesBuffer, dacValuesBuffer;
 
-horter::I2HE    testInputs(INPUT_ADDRESS);
-horter::I2HA    testOutputs(OUTPUT_ADDRESS);
-horter::I2HAE   testAnalogInputs(ADC_ADDRESS);
-horter::I2HAA   testAnalogOutputs(DAC_ADDRESS);
+horter::I2HE    testInputs        (INPUT_ADDRESS);
+horter::I2HA    testOutputs       (OUTPUT_ADDRESS);
+horter::I2HAE   testAnalogInputs  (ADC_ADDRESS);
+horter::I2HAA   testAnalogOutputs (DAC_ADDRESS);
 
 void wireJobList();
 
@@ -37,6 +37,10 @@ void setup() {
   delay(500);
   Serial.begin(9600);  // start serial for output
   Wire.begin();        // join i2c bus (address optional for master)
+  testInputs.begin();       
+  testOutputs.begin();      
+  testAnalogInputs.begin(); 
+  testAnalogOutputs.begin();
 }
 
 void loop() {
