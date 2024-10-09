@@ -51,7 +51,7 @@ namespace horter {
   {
   public:
 
-    uint8_t dataIn;
+    uint8_t data;
 
     explicit I2HE(const uint8_t deviceAddress = 0x20, TwoWire *wire = &Wire);
 
@@ -65,7 +65,7 @@ namespace horter {
 
     uint8_t read8();
     uint8_t read(const uint8_t pin);
-    uint8_t value() const { return dataIn; };
+    uint8_t value() const { return data; };
 
     int     lastError();
 
@@ -86,7 +86,7 @@ namespace horter {
   {
   public:
 
-    uint8_t dataOut;
+    uint8_t data;
     
     explicit I2HA(const uint8_t deviceAddress = 0x20, TwoWire *wire = &Wire);
 
@@ -135,7 +135,7 @@ namespace horter {
   {
   public:
 
-    uint16_t dataIn[5] = HORTER_I2HAE_INITIAL_VALUE;
+    uint16_t data[5] = HORTER_I2HAE_INITIAL_VALUE;
 
     explicit I2HAE(const uint8_t deviceAddress = 0x20, TwoWire *wire = &Wire);
 
@@ -149,7 +149,7 @@ namespace horter {
 
     uint16_t* read5();
     uint16_t read(const uint8_t channel);
-    uint16_t* value() { return dataIn; };
+    uint16_t* value() { return data; };
 
     int     lastError();
 
@@ -170,7 +170,7 @@ namespace horter {
   {
   public:
 
-    uint16_t  dataOut[4] = HORTER_I2HAA_INITIAL_VALUE;
+    uint16_t  data[4] = HORTER_I2HAA_INITIAL_VALUE;
 
     explicit  I2HAA(const uint8_t deviceAddress = 0x20, TwoWire *wire = &Wire);
 
@@ -184,7 +184,7 @@ namespace horter {
 
     void      write4(const uint16_t value[4]);
     void      write(const uint8_t channel, const uint16_t value);
-    uint16_t* valueOut() { return dataOut; }
+    uint16_t* valueOut() { return data; }
 
     int       lastError();
 

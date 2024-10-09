@@ -57,13 +57,13 @@ void wireJobList(){
       testAnalogInputs.read5();
       break;
     case 2:
-      testAnalogOutputs.write4(testAnalogInputs.dataIn);
+      testAnalogOutputs.write4(testAnalogInputs.data);
       break;
     case 3:
       testInputs.read8();
       break;
     case 4:
-      testOutputs.write8(testInputs.dataIn);
+      testOutputs.write8(testInputs.data);
       break;
     default:
       wireJobListPosition = 0;

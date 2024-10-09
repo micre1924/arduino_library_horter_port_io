@@ -13,7 +13,7 @@ namespace horter {
   {
     _address    = deviceAddress;
     _wire       = wire;
-    dataIn     = 0;
+    data     = 0;
     _error      = HORTER_I2HE_OK;
   }
 
@@ -50,11 +50,11 @@ namespace horter {
     if (_wire->requestFrom(_address, 1U) != 1)
     {
       _error = HORTER_I2HE_I2C_ERROR;
-      return dataIn;  //  last value
+      return data;  //  last value
     }
     // get Complement
-    dataIn = -(_wire->read() + 1);
-    return dataIn;
+    data = -(_wire->read() + 1);
+    return data;
   }
 
   uint8_t I2HE::read(const uint8_t pin)
@@ -65,7 +65,7 @@ namespace horter {
       return 0;
     }
     I2HE::read8();
-    return (dataIn & (1 << pin)) > 0;
+    return (data & (1 << pin)) > 0;
   }
 
   int I2HE::lastError()
@@ -83,7 +83,7 @@ namespace horter {
   {
     _address    = deviceAddress;
     _wire       = wire;
-    dataOut    = 0xFF;
+    data    = 0xFF;
     _error      = HORTER_I2HA_OK;
   }
 
@@ -113,9 +113,9 @@ namespace horter {
 
   void I2HA::write8(const uint8_t value)
   {
-    dataOut = value;
+    data = value;
     _wire->beginTransmission(_address);
-    _wire->write(-(dataOut + 1));
+    _wire->write(-(data + 1));
     _error = _wire->endTransmission();
   }
 
@@ -128,13 +128,13 @@ namespace horter {
     }
     if (value == LOW)
     {
-      dataOut &= ~(1 << pin);
+      data &= ~(1 << pin);
     }
     else
     {
-      dataOut |= (1 << pin);
+      data |= (1 << pin);
     }
-    write8(dataOut);
+    write8(data);
   }
 
   void I2HA::toggle(const uint8_t pin)
@@ -149,24 +149,24 @@ namespace horter {
 
   void I2HA::toggleMask(const uint8_t mask)
   {
-    dataOut ^= mask;
-    I2HA::write8(dataOut);
+    data ^= mask;
+    I2HA::write8(data);
   }
 
   void I2HA::shiftRight(const uint8_t n)
   {
-    if ((n == 0) || (dataOut == 0)) return;
-    if (n > 7)         dataOut = 0;     //  shift 8++ clears all, valid...
-    if (dataOut != 0) dataOut >>= n;   //  only shift if there are bits set
-    I2HA::write8(dataOut);
+    if ((n == 0) || (data == 0)) return;
+    if (n > 7)         data = 0;     //  shift 8++ clears all, valid...
+    if (data != 0) data >>= n;   //  only shift if there are bits set
+    I2HA::write8(data);
   }
 
   void I2HA::shiftLeft(const uint8_t n)
   {
-    if ((n == 0) || (dataOut == 0)) return;
-    if (n > 7)         dataOut = 0;    //  shift 8++ clears all, valid...
-    if (dataOut != 0) dataOut <<= n;  //  only shift if there are bits set
-    I2HA::write8(dataOut);
+    if ((n == 0) || (data == 0)) return;
+    if (n > 7)         data = 0;    //  shift 8++ clears all, valid...
+    if (data != 0) data <<= n;  //  only shift if there are bits set
+    I2HA::write8(data);
   }
 
   int I2HA::lastError()
@@ -180,8 +180,8 @@ namespace horter {
   {
     uint8_t r = n & 7;
     if (r == 0) return;
-    dataOut = (dataOut >> r) | (dataOut << (8 - r));
-    I2HA::write8(dataOut);
+    data = (data >> r) | (data << (8 - r));
+    I2HA::write8(data);
   }
 
   void I2HA::rotateLeft(const uint8_t n)
@@ -191,7 +191,7 @@ namespace horter {
 
   void I2HA::reverse()  //  quite fast: 4 and, 14 shifts, 3 or, 3 assignment.
   {
-    uint8_t x = dataOut;
+    uint8_t x = data;
     x = (((x & 0xAA) >> 1) | ((x & 0x55) << 1));
     x = (((x & 0xCC) >> 2) | ((x & 0x33) << 2));
     x =          ((x >> 4) | (x << 4));
@@ -258,7 +258,7 @@ namespace horter {
     if (_wire->requestFrom(_address, 11U) != 11)
     {
       _error = HORTER_I2HAE_I2C_ERROR;
-      return dataIn;  //  last value
+      return data;  //  last value
     }
 
     if (_wire->available()) {
@@ -266,17 +266,17 @@ namespace horter {
 
       for (int i = 0; i < 5; i++)
       {
-        dataIn[i] = raw[(i * 2) + 1] | (raw[(i * 2) + 2] << 8);
+        data[i] = raw[(i * 2) + 1] | (raw[(i * 2) + 2] << 8);
       }
     }
 
-    return dataIn;
+    return data;
   }
 
   uint16_t I2HAE::read(const uint8_t channel)
   {
     I2HAE::read5();
-    return dataIn[channel];
+    return data[channel];
   }
 
   int I2HAE::lastError()
@@ -300,7 +300,7 @@ namespace horter {
   bool I2HAA::begin()
   {
     if (! isConnected()) return false;
-    I2HAA::write4(dataOut);
+    I2HAA::write4(data);
     return true;
   }
 
@@ -325,19 +325,19 @@ namespace horter {
   {
     for (size_t i = 0; i < 4; i++)
     {
-      dataOut[i] = value[i];
+      data[i] = value[i];
     }
     
     uint8_t raw[9];
     raw[0] = 0;
-    raw[1] = dataOut[0];
-    raw[2] = dataOut[0] >> 8;
-    raw[3] = dataOut[1];
-    raw[4] = dataOut[1] >> 8;
-    raw[5] = dataOut[2];
-    raw[6] = dataOut[2] >> 8;
-    raw[7] = dataOut[3];
-    raw[8] = dataOut[3] >> 8;
+    raw[1] = data[0];
+    raw[2] = data[0] >> 8;
+    raw[3] = data[1];
+    raw[4] = data[1] >> 8;
+    raw[5] = data[2];
+    raw[6] = data[2] >> 8;
+    raw[7] = data[3];
+    raw[8] = data[3] >> 8;
 
     _wire->beginTransmission(_address);
     _wire->write(raw, 9);
@@ -346,8 +346,8 @@ namespace horter {
 
   void I2HAA::write(const uint8_t channel, const uint16_t value)
   {
-    dataOut[channel] = value;
-    write4(dataOut);
+    data[channel] = value;
+    write4(data);
   }
 
   int I2HAA::lastError()
