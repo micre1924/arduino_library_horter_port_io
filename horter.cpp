@@ -13,7 +13,7 @@ namespace horter {
   {
     _address    = deviceAddress;
     _wire       = wire;
-    data     = 0;
+    data        = HORTER_I2HE_INITIAL_VALUE;
     _error      = HORTER_I2HE_OK;
   }
 
@@ -83,7 +83,7 @@ namespace horter {
   {
     _address    = deviceAddress;
     _wire       = wire;
-    data    = 0xFF;
+    data        = HORTER_I2HA_INITIAL_VALUE;
     _error      = HORTER_I2HA_OK;
   }
 

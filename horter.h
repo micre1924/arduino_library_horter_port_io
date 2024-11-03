@@ -9,7 +9,7 @@
 
 // I2HE - 8 channel I2C Input expander
 #ifndef HORTER_I2HE_INITIAL_VALUE
-#define HORTER_I2HE_INITIAL_VALUE       0xFF
+#define HORTER_I2HE_INITIAL_VALUE       0x00
 #endif
 
 #define HORTER_I2HE_OK                  0x00
@@ -18,7 +18,7 @@
 
 // I2HA - 8 channel I2C Output expander
 #ifndef HORTER_I2HA_INITIAL_VALUE
-#define HORTER_I2HA_INITIAL_VALUE       0xFF
+#define HORTER_I2HA_INITIAL_VALUE       0x00
 #endif
 
 #define HORTER_I2HA_OK                  0x00
